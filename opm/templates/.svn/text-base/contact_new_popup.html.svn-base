@@ -1,0 +1,35 @@
+{% extends "pop_up_base.html" %}
+
+{% block content %}
+<div>
+	<form method = "POST" action="">
+		<div class="formSection">
+			<p><label for = "firstname">First Name: {{form.firstname}}</label></p>
+			<p><label for = "lastname">Last Name: {{form.lastname}}</label></p>
+			<p><label for = "company">Company: {{form.company}}</label></p>
+			<p><label for = "title">Job Title: {{form.title}}</label></p>
+		</div>
+		<div class="formSection">
+			<p><label for = "cell"> Cell#: {{form.cell}}</label></p>
+			<p><label for = "landline"> Office#: {{form.landline}}</label></p>
+			<p><label for = "fax"> Fax#: {{form.fax}}</label></p>
+			<p><label for = "email">Email: {{form.email}}</label></p>
+		</div>
+		<div class="formSection">
+			<p><label for = "primary_address_line1"> Address Line 1: {{form.primary_address_line1}}</label></p>
+			<p><label for = "primary_address_line2"> Address Line 2: {{form.primary_address_line2}}</label></p>
+			<p><label for = "primary_city"> City: {{form.primary_city}}</label></p>
+			<p><label for = "primary_state"> State: {{form.primary_state}}</label></p>
+			<p><label for = "primary_post_code"> Post Code: {{form.primary_post_code}}</label></p>
+		</div>
+		<div class="formSection">
+			<p><label for = "secondary_address_line1"> Address Line 1: {{form.secondary_address_line1}}</label></p>
+			<p><label for = "secondary_address_line2"> Address Line 2: {{form.secondary_address_line2}}</label></p>
+			<p><label for = "secondary_city"> City: {{form.secondary_city}}</label></p>
+			<p><label for = "secondary_state"> State: {{form.secondary_state}}</label></p>
+			<p><label for = "secondary_post_code"> Post Code: {{form.secondary_post_code}}</label></p>
+		</div>
+		<input class="popup_closer" type = "submit" value = "create"/>
+	</form>
+</div>
+{% endblock %}

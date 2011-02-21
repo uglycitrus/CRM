@@ -1,0 +1,17 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8">
+		<link rel="stylesheet" type="text/css" href="/site_media/styles/screen.css" />
+		<title>VARTA OPM</title>
+	</head>
+	
+	<body>
+		{% block content%}{%endblock%}
+		<script type="text/javascript" src="/site_media/scripts/jquery.js"></script>
+		<script type="text/javascript" src="/site_media/scripts/development-bundle/ui/ui.core.js"></script>
+		<script type="text/javascript" src="/site_media/scripts/development-bundle/ui/ui.datepicker.js"></script>
+		<script type="text/javascript" src="/site_media/scripts/main.js"></script>
+		<script type="text/javascript" src="/site_media/scripts/view.js"></script>
+	</body>
+</html>

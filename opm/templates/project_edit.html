@@ -1,0 +1,110 @@
+{% extends "project_new.html" %}
+
+{% block top %}
+	<div id="control_bar">
+		<h1>
+		<a href="{% url project_view project.id %}"> {{project.customer}} ${{project.sales_potential}}K {% firstof project.battery_pack project.battery project.battery_description %}</a> 
+		</h1>
+	</div>
+{% endblock %}
+
+{% block bottom %}
+	<div class="bottom">
+		<div class="formSection">
+			<h3>FILES</h3>
+			<table>
+				{% load opm_extras %}
+
+				{% extend_files 'Project' project.id %}
+				{% if files %}
+						{% for file in files %}
+						<tr>
+							<td><a target="new window" href="{% url upload_view file.upload.file%}">{{file.upload.file_title}}</a></td>
+						</tr>
+						{% endfor %}
+						<tr>
+							<td> <button class="link_file" link="{% url link_a_file "project", project.id %}" type="button">Link a File</button> </td>
+						</tr>
+				{% else %}							
+						<tr> <td> <button class="link_file" link="{% url link_a_file "project", project.id %}" type="button">Link a File</button> </td> </tr>
+				{% endif %}
+			</table>
+		</div>
+		<div class="formSection">
+			<h3>SAMPLES</h3>
+			<table>
+				{% extend_samples project.id %}
+				{% if samples %}
+						{% for sample in samples %}
+						<tr>
+							<th>{{sample.date|date:"M d \'y"}}</th>
+						</tr>
+						{% endfor %}
+						<tr>
+							<td><a href = "{% url sample_new project.id %}">RE-SAMPLE</a></td>
+						</tr>
+				{% else %}							
+					<tr><td><a href = "{% url sample_new project.id %}">SAMPLE</a></td></tr>
+				{% endif %}
+			</table>
+
+		</div>
+		<div class="formSection">
+			<h3>SPR</h3>
+			<table>
+				{% extend_spr project.id %}
+				{% if spr_list %}
+					{% for spr in spr_list %}
+					<tr>
+						<th>{{spr.date|date:"M d \'y"}}</th>
+						<th>SPR#{{spr.spr_number}}</th>
+					</tr>
+						{% extend_spr_rows spr.spr_number %}
+						{% for spr_row in spr_rows %}
+					<tr>	
+						<td>{{ spr_row.battery_description }}</td>
+						<td>{{ spr_row.quantity }}pcs</td>
+						<td>${{ spr_row.price }}</td>
+					</tr>	
+						{% endfor %}
+					{% endfor %}
+					<tr>
+						<td><a href = "{% url spr_new project.id %}">NEW SPR</a></td>
+					</tr>
+				{% else %}							
+					<tr><td><a href = "{% url spr_new project.id %}">NEW SPR</a></td></tr>
+				{% endif %}	
+			</table>
+
+		</div>
+		<div class="formSection">
+			<h3>Quote</h3>
+			<table>
+				{% extend_quotes project.id %}
+				{% if quotes %}
+				<td id="quote" class="tmpOff">
+					{% for quote in quotes %}
+					<tr>
+						<th>{{quote.date|date:"M d \'y"}}</th>
+						<th>Quote#{{quote.quote_number}}</th>
+					</tr>
+						{% extend_quote_rows quote.quote_number %}
+						{% for quote_row in quote_rows %}
+					<tr>	
+						<td>{{ quote_row.battery }}</td>
+						<td>{{ quote_row.quantity }}pcs</td>
+						<td>${{ quote_row.price }}</td>
+					</tr>	
+						{% endfor %}
+					{% endfor %}
+					<tr>
+						<td><a href = "{% url quote_new project.id %}">RE-QUOTE</a></td>
+					</tr>
+				{% else %}							
+					<tr><td><a href = "{% url quote_new project.id %}">QUOTE</a></td></tr>
+				{% endif %}	
+			</table>
+		</div>
+	</div>
+{% endblock %}
+

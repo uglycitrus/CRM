@@ -1,0 +1,67 @@
+{% extends "project_list_base.html" %}
+
+
+{% block content %}
+
+	{% block top%}
+		<div id="control_bar">
+			<h1>New Project</h1>
+		</div>
+	{% endblock %}
+	
+	<div>
+		<form method = "POST" action="">
+			<div class="formSection">
+				<p><label for = "status">Status: {{form.status}}</label></p>
+				<p><label for = "division">Division: {{form.division}}</label></p>
+				<p><label for = "region">Region: {{form.region}}</label></p>
+				<p><label for = "market_segment">Market Segment: {{form.market_segment}}</label></p>
+			</div>
+			<div class="formSection">
+				{{form.customer.errors}}
+				<p><label for = "customer">Customer: {{form.customer}}</label></p>
+				{{form.sales_potential.errors}}
+				<p><label for = "sales_potential">Potential($k/yr): {{form.sales_potential}}</label></p>
+			</div>
+			<div class="formSection">
+				{{form.vkb_number.errors}}
+				<p><label for = "pack">VKB Number: {{form.vkb_number}}</label></p>
+				{{form.type_number.errors}}
+				<p><label for = "battery">Type Number: {{form.type_number}}</label></p>
+				{{form.battery_description.errors}}
+				<p><label for = "battery_description">Battery Description: {{form.battery_description}}</label></p>
+			</div>
+			<div class="formSection">
+				<p>
+					<label for = "primary_contact_id">{{form.primary_contact_id}}</label>
+					<label for = "primary_contact_name">Primary Contact:{{form.primary_contact_name}}</label>
+					<a class="add_contact" link="{% url contact_add_popup "id_primary_contact" %}" href="#">add primary contact</a>
+				</p>
+				<p>
+					<label for = "sales_rep_id">{{form.sales_rep_id}}</label>
+					<label for = "sales_rep_name">Sales Rep:{{form.sales_rep_name}}</label>
+					<a class="add_contact" link="{% url contact_add_popup "id_sales_rep" %}" href="#">add sales rep</a>
+				</p>
+				<p>
+					<label for = "project_manager_id">{{form.project_manager_id}}</label>
+					<label for = "project_manager_name">Project Manager:{{form.project_manager_name}}</label>
+					<a class="add_contact" link="{% url contact_add_popup "id_project_manager" %}" href="#">add project manager</a>
+				</p>
+			</div>
+			<div class="formSection">
+				<p><label for = "prototype_verification">Prototype Verification: {{form.prototype_verification}}</label></p>
+				<p><label for = "design_verification">Design Verification: {{form.design_verification}}</label></p>
+				<p><label for = "manufacturing_verification">Manufacturing Verification: {{form.manufacturing_verification}}</label></p>
+				<p><label for = "production_verification">Production Verification: {{form.production_verification}}</label></p>
+				<p><label for = "end_of_life">End of Life: {{form.end_of_life}}</label></p>
+			</div>
+			<div class="formSection">
+				{{form.notes.errors}}
+				<p><label for = "notes">Notes: {{form.notes}}</label></p>
+			</div>
+		{% block submit_button %}<input type = "submit" value = "save"/>{% endblock %}
+		</form>
+	</div>
+{% endblock %}
+
+{% block bottom %}{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "project_list_base.html" %}
+
+{% block content %}
+<div id="create_or_edit">
+	<form method = "POST" action="">
+		<h3> EDIT </h3>
+		<div class="formSection"> 
+			<label for = "date">Date: {{form.date}}</label><br/>
+			<label for = "fob">fob: {{form.fob}}</label><br/>
+			<label for = "terms">terms: {{form.terms}}</label><br/>
+			<label for = "valid_through">valid_through: {{form.valid_through}}</label><br/>
+			<label for = "account_type">account_type: {{form.account_type}}</label><br/>
+			<label for = "application">application: {{form.application}}</label><br/>
+			<label for = "proposed_quantity">proposed_quantity: {{form.proposed_quantity}}</label><br/>
+			<label for = "product_to_be_sold">product_to_be_sold: {{form.product_to_be_sold}}</label><br/>
+		</div>
+		<div class="formSection"> 
+			<h1>Ship To</h1>
+			<a class="add_contact" link="{% url contact_add_popup "id_required" %}" href="#">choose</a><br/>
+			<label for="required_company">Company:{{customer_form.required_company}}</label><br/>
+			<label for="required_attention">Attn:{{customer_form.required_attention}}</label><br/>
+			<label for="required_address_line1">Address Line1:{{customer_form.required_address_line1}}</label><br/>
+			<label for="required_address_line2">Address Line2:{{customer_form.required_address_line2}}</label><br/>
+			<label for="required_city">City:{{customer_form.required_city}}</label><br/>
+			<label for="required_state">State:{{customer_form.required_state}}</label><br/>
+			<label for="required_post_code">Post Code:{{customer_form.required_post_code}}</label><br/>
+			<label for="required_phone">Phone#:{{customer_form.required_phone}}</label><br/>
+			<label for="required_id">{{customer_form.required_id}}</label><br/>
+		</div>
+		<div class="formSection"> 
+			<table>
+				<tr>
+					<th colspan =3>Part </th>
+					<th>Quantity </th>
+					<th>Price </th>
+					<th>Margin </th>
+				</tr>
+			{% for row in rows %}
+				<tr class="link" link="#">
+					<input type="hidden" name="row_id{{ forloop.counter }}" id="id_row_id{{ forloop.counter }}" value="{{ row.id }}" />
+					<td><input type="text" name="battery_description{{ forloop.counter }}" id="id_battery_description{{ forloop.counter }}" value="{{ row.battery_description}}" /></td>
+					<td><input type="text" name="battery{{ forloop.counter }}" id="id_battery{{ forloop.counter }}" value="{{ row.battery }}" /></td>
+					<td><input type="text" name="battery_pack{{ forloop.counter }}" id="id_battery_pack{{ forloop.counter }}" value="{{ row.battery_pack }}" /></td>
+					<td><input type="text" name="quantity{{ forloop.counter }}" id="id_quantity{{ forloop.counter }}" value="{{ row.quantity }}" /></td>
+					<td>$<input type="text" name="price{{ forloop.counter }}" id="id_price{{ forloop.counter }}" value="{{ row.price }}" />/ea</td>
+					<td><input type="text" name="margin{{ forloop.counter }}" id="id_margin{{ forloop.counter }}" value="{{ row.margin }}" />%</td>
+				</tr>
+			{% endfor %}
+			</table>
+		</div>
+		<input type = "submit" value = "create"/>
+	</form>
+</div>
+{% endblock %}

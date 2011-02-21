@@ -1,0 +1,18 @@
+
+{% extends "pop_up_base.html" %}
+
+{% block content %}
+
+	<div id="control_bar">
+		<p>
+			Click to confirm a link between <br/>
+			&nbsp &nbsp &nbsp Project: {{project.customer}} {{project.battery_description}} <br/>
+			&nbsp &nbsp &nbsp Upload: {{upload.file}} {{upload.file_name}}
+		</p>
+		<form method = "GET" action="">
+			<input type = "submit" value = "confirm"/>
+		</form>
+	</div>
+
+
+{% endblock %}

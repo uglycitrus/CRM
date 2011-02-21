@@ -1,0 +1,50 @@
+{% extends "project_list_base.html" %}
+
+{% block content %}
+<div id="create_or_edit">
+	<form method = "POST" action="">
+		<h3> VIEW </h3>
+		<div class="formSection"> 
+			<label for = "date">Date: {{spr.date}}</label><br/>
+			<label for = "fob">fob: {{spr.fob}}</label><br/>
+			<label for = "terms">terms: {{spr.terms}}</label><br/>
+			<label for = "valid_through">valid_through: {{spr.valid_through}}</label><br/>
+			<label for = "account_type">account_type: {{spr.account_type}}</label><br/>
+			<label for = "application">application: {{spr.application}}</label><br/>
+			<label for = "proposed_quantity">proposed_quantity: {{spr.proposed_quantity}}</label><br/>
+			<label for = "product_to_be_sold">product_to_be_sold: {{spr.product_to_be_sold}}</label><br/>
+		</div>
+		<div class="formSection"> 
+			<h1>Customer:</h1>
+			{{spr.customer_company}}<br/>
+			ATTN:{{spr.customer_attention}}<br/>
+			{{spr.customer_address_line1}}<br/>
+			{% if spr.customer_line2 %} {{spr.customer_address_line2}}<br/>
+			{% else %}{{spr.customer_city}}, {{spr.customer_state}} {{spr.customer_post_code}}<br/>
+			{% endif %}
+			{% if spr.customer_line2 %} {{spr.customer_city}}, {{spr.customer_state}} {{spr.customer_post_code}}<br/>{% endif %}
+			{{spr.customer_phone}}<br/>
+		</div>
+		<div class="formSection"> 
+			<table>
+				<tr>
+					<th>Part </th>
+					<th>Quantity </th>
+					<th>Price </th>
+					<th>Margin </th>
+				</tr>
+			{% for row in rows %}
+				<tr class="link" link="#">
+					<td>{% firstof row.battery_pack row.battery row.battery_description %}</td>
+					<td>{{row.quantity}}pcs</td>
+					<td>${{row.price}}</td>
+					<td>{{row.margin}}%</td>
+				</tr>
+			{% endfor %}
+			</table>
+		</div>
+		<input type = "submit" value = "Download Doc File"/>
+	</form>
+</div>
+{% endblock %}
+

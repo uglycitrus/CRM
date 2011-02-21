@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8">
+		<link rel="stylesheet" type="text/css" href="/site_media/styles/screen.css" />
+		<title>VARTA OPM</title>
+	</head>
+	
+	<body id="{{tab}}">
+		<div id="root">
+			<div id="header">
+				{% block link_parent%}
+				<div id="links">
+					<ul>
+						<li class="projects" ><a href="{% url project_list%}">projects</a></li>
+						<li class="batteries" ><a href="{% url battery_list value='none' selection='none' %}">batteries</a></li>
+						<li class="contacts" ><a href="{% url contact_list %}">contacts</a></li>
+						<li class="samples" ><a href="{% url sample_list%}">samples</a></li>
+						<li class="sprs" ><a href="{% url spr_list%}">sprs</a></li>
+						<li class="quotes" ><a href="{% url quote_list %}">quotes</a></li>
+						<li class="reports" ><a href="#">call reports</a></li>
+						<li class="uploads" ><a href="{% url upload_list %}">uploads</a></li>
+					</ul>
+				</div>
+				<div id="account">
+					<ul>
+						<li><a href="{% url logout %}">logout</a></li>
+						<li>logged in as {{user}}</li>
+					</ul>
+				</div>
+			</div>
+			{% endblock %}
+
+			{% block content%}{%endblock%}
+		</div>
+		<script type="text/javascript" src="/site_media/scripts/jquery.js"></script>
+		<script type="text/javascript" src="/site_media/scripts/development-bundle/ui/ui.core.js"></script>
+		<script type="text/javascript" src="/site_media/scripts/development-bundle/ui/ui.datepicker.js"></script>
+		<script type="text/javascript" src="/site_media/scripts/main.js"></script>
+		<script type="text/javascript" src="/site_media/scripts/view.js"></script>
+		<script type="text/javascript" src="/site_media/scripts/new_row.js"></script>
+		<script type="text/javascript" src="/site_media/scripts/load_rows.js"></script>
+	</body>
+</html>

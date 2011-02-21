@@ -1,0 +1,22 @@
+from opm.project_list.models import Contact
+from opm.project_list.models import Battery
+from opm.project_list.models import Pack
+from opm.project_list.models import Sample
+from opm.project_list.models import Quote
+from opm.project_list.models import QuoteRow
+from opm.project_list.models import SPR
+from opm.project_list.models import SPRRow
+from opm.project_list.models import Project
+from opm.project_list.models import Link
+from django.contrib import admin
+
+admin.site.register(Contact)
+admin.site.register(Battery)
+admin.site.register(Pack)
+admin.site.register(Sample)
+admin.site.register(Quote)
+admin.site.register(QuoteRow)
+admin.site.register(SPR)
+admin.site.register(SPRRow)
+admin.site.register(Project)
+admin.site.register(Link)

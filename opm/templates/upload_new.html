@@ -1,0 +1,22 @@
+{% extends "pop_up_base.html" %}
+
+{% block content %}
+	<form method = "POST" enctype="multipart/form-data" action="">
+		<div class="formSection">
+
+			<p>
+				{{form.file.errors}}
+				<label for = "file">file :</label>
+				{{form.file}}
+			</p>
+
+			<p>
+				{{form.file_title.errors}}
+				<label for = "file_title">file_title :</label>
+				{{form.file_title}}
+			</p>
+		</div>
+	{% block submit_button %}<input type = "submit" value = "save"/>{% endblock %}
+	</form>
+{% endblock %}
+

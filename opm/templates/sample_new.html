@@ -1,0 +1,61 @@
+{% extends "project_list_base.html" %}
+
+{% block content %}
+<div id="create_or_edit">
+	<form method = "POST" action="">
+		<div class="formSection"> 
+			{{form.date.errors}}
+			<p><label for = "date">Date: {{form.date}}</label></p>
+			{{form.engineer.errors}}
+			<p><label for="engineer">Engineer:{{form.engineer}}</label></p>
+			{{form.inside_sales.errors}}
+			<p><label for="inside_sales">Inside Sales:{{form.inside_sales}}</label></p>
+			{{form.battery_description.errors}}
+			<p><label for = "battery">Battery: {{form.battery_description}}</label></p>
+		</div>
+		<div class="formSection"> 
+			<h1>End User</h1>
+			<a class="add_contact" link="{% url contact_add_popup "id_non_required" %}" href="#">choose</a>
+			{{end_user_form.non_required_company.errors}}
+			<p><label for="non_required_company">Company:{{end_user_form.non_required_company}}</label></p>
+			{{end_user_form.non_required_attention.errors}}
+			<p><label for="non_required_attention">Attn:{{end_user_form.non_required_attention}}</label></p>
+			{{end_user_form.non_required_address_line1.errors}}
+			<p><label for="non_required_address_line1">Address Line1:{{end_user_form.non_required_address_line1}}</label></p>
+			{{end_user_form.non_required_address_line2.errors}}
+			<p><label for="non_required_address_line2">Address Line2:{{end_user_form.non_required_address_line2}}</label></p>
+			{{end_user_form.non_required_city.errors}}
+			<p><label for="non_required_city">City:{{end_user_form.non_required_city}}</label></p>
+			{{end_user_form.non_required_state.errors}}
+			<p><label for="non_required_state">State:{{end_user_form.non_required_state}}</label></p>
+			{{end_user_form.non_required_post_code.errors}}
+			<p><label for="non_required_post_code">Post Code:{{end_user_form.non_required_post_code}}</label></p>
+			{{end_user_form.non_required_phone.errors}}
+			<p><label for="non_required_phone">Phone#:{{end_user_form.non_required_phone}}</label></p>
+			<p><label for="non_required_id">{{end_user_form.non_required_id}}</label></p>
+		</div>
+		<div class="formSection"> 
+			<h1>Ship To</h1>
+			<a class="add_contact" link="{% url contact_add_popup "id_required" %}" href="#">choose</a>
+			{{ship_to_form.required_company.errors}}
+			<p><label for="required_company">Company:{{ship_to_form.required_company}}</label></p>
+			{{ship_to_form.required_attention.errors}}
+			<p><label for="required_attention">Attn:{{ship_to_form.required_attention}}</label></p>
+			{{ship_to_form.required_address_line1.errors}}
+			<p><label for="required_address_line1">Address Line1:{{ship_to_form.required_address_line1}}</label></p>
+			{{ship_to_form.required_address_line2.errors}}
+			<p><label for="required_address_line2">Address Line2:{{ship_to_form.required_address_line2}}</label></p>
+			{{ship_to_form.required_city.errors}}
+			<p><label for="required_city">City:{{ship_to_form.required_city}}</label></p>
+			{{ship_to_form.required_state.errors}}
+			<p><label for="required_state">State:{{ship_to_form.required_state}}</label></p>
+			{{ship_to_form.required_post_code.errors}}
+			<p><label for="required_post_code">Post Code:{{ship_to_form.required_post_code}}</label></p>
+			{{ship_to_form.required_phone.errors}}
+			<p><label for="required_phone">Phone#:{{ship_to_form.required_phone}}</label></p>
+			<p><label for="required_id">{{ship_to_form.required_id}}</label></p>
+		</div>
+		<input type = "submit" value = "create"/>
+	</form>
+</div>
+{% endblock %}

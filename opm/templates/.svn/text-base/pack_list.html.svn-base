@@ -1,0 +1,49 @@
+{% extends "battery_n_pack_list_base.html" %}
+{% load pagination_tags %}
+{% load sorting_tags %}
+
+{% block PackTitle%}
+	<h2>
+		{{battery.type_description}} / Type# {{battery.type_number}} 
+		<a href="{% url upload_view battery.type_number %}" target="_blank">datasheet</a>
+	</h2>
+{% endblock %}
+
+{% if list %}
+{% block table %}
+	<div id="list">
+		<table>
+			<thead>
+				<tr>
+					<th> {% anchor vkb_number 'vkb_number' %} </th> 
+					<th> {% anchor drawing_number 'drawing_number' %} </th> 
+					<th> {% anchor capacity 'Capacity' %} </th> 
+					<th> {% anchor voltage 'voltage' %} </th> 
+					<th> {% anchor max_cont 'max_cont' %} </th> 
+					<th> {% anchor max_pulse 'max_pulse' %} </th> 
+					<th> {% anchor series_cells 'series_cells' %} </th> 
+					<th> {% anchor parallel_cells 'parallel_cells' %} </th> 
+				</tr>
+			</thead>
+			<tbody>
+				{% autosort list %}
+				{% autopaginate list %}
+				{% for i in list %}
+				<tr class="link" link="{% url pack_edit i.vkb_number %}">
+					<th> {{ i.vkb_number }} <a href="{% url upload_view i.vkb_number %}" target="_blank">drawing</a></th> 
+					<th> {{ i.drawing_number }} </th> 
+					<th> {{ i.capacity }} </th> 
+					<th> {{ i.voltage }} </th> 
+					<th> {{ i.max_cont }} </th> 
+					<th> {{ i.max_pulse }} </th> 
+					<th> {{ i.series_cells }} </th> 
+					<th> {{ i.parallel_cells }} </th> 
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		{% paginate %}
+	</div>
+{% endblock %}
+{% endif %}
+

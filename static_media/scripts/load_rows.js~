@@ -1,0 +1,16 @@
+$(document).ready(function(){
+			var num = $('input#id_rows').val();
+			var length = $('.clonedInput').length; 
+
+			for (var i = 0; i < 10, i++){
+				var newNum = new Number(length +1);
+				var newElem = $('#input'+num).clone().attr('id', 'input'+newNum);
+				newElem.children(':first').attr('name', 'battery_description'+newNum);
+				newElem.find(':nth-child(2)').attr('name', 'type_number'+newNum);
+				newElem.find(':nth-child(3)').attr('name', 'vkb_number'+newNum);
+				newElem.find(':nth-child(5)').attr('name', 'quantity'+newNum);
+				newElem.find(':nth-child(6)').attr('name', 'price'+newNum);
+				$('div#input1').after(newElem);
+			};
+	}
+);

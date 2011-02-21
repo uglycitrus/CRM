@@ -1,0 +1,81 @@
+{% extends "project_list_base.html" %}
+
+{% block content %}
+<div id="create_or_edit">
+	<form method = "POST" action="">
+		<div class="formSection">
+			{{form.date.errors}}
+			<label for = "date">Date: {{form.date}}</label><br/>
+			<label for = "inquiry_date">Inquiry Date: {{form.inquiry_date}}</label><br/>
+			<label for = "fob">fob: {{form.fob}}</label><br/>
+			<label for = "terms">terms: {{form.terms}}</label><br/>
+
+			<p>
+				<label for = "id_signature1">signature1: {{form.signature1}}</label><br/>
+				<label for="id_signature1_id">{{form.signature1_id}}</label>
+				<label for = "id_signature1_title">title: {{form.signature1_title}}</label>
+				<a class="add_contact" link="{% url contact_add_popup "id_signature1" %}" href="#">choose</a>
+			</p>
+			<p>
+				<label for = "id_signature2">signature2: {{form.signature2}}</label><br/>
+				<label for="id_signature2_id">{{form.signature2_id}}</label>
+				<label for = "id_signature2_title">title: {{form.signature2_title}}</label>
+				<a class="add_contact" link="{% url contact_add_popup "id_signature2" %}" href="#">choose</a>
+			</p>
+			<p>
+				<label for = "id_signature3">signature3: {{form.signature3}}</label><br/>
+				<label for="id_signature3_id">{{form.signature3_id}}</label>
+				<label for = "id_signature3_title">title: {{form.signature3_title}}</label>
+				<a class="add_contact" link="{% url contact_add_popup "id_signature3" %}" href="#">choose</a>
+			</p>
+			{{form.rows}}
+		</div>
+		<div class="formSection"> 
+			<h1>Customer</h1>
+			<a class="add_contact" link="{% url contact_add_popup "id_required" %}" href="#">choose</a>
+			{{customer_form.required_company.errors}}
+			<p><label for="required_company">Company:{{customer_form.required_company}}</label></p>
+			{{customer_form.required_attention.errors}}
+			<p><label for="required_attention">Attn:{{customer_form.required_attention}}</label></p>
+			{{customer_form.required_address_line1.errors}}
+			<p><label for="required_address_line1">Address Line1:{{customer_form.required_address_line1}}</label></p>
+			{{customer_form.required_address_line2.errors}}
+			<p><label for="required_address_line2">Address Line2:{{customer_form.required_address_line2}}</label></p>
+			{{customer_form.required_city.errors}}
+			<p><label for="required_city">City:{{customer_form.required_city}}</label></p>
+			{{customer_form.required_state.errors}}
+			<p><label for="required_state">State:{{customer_form.required_state}}</label></p>
+			{{customer_form.required_post_code.errors}}
+			<p><label for="required_post_code">Post Code:{{customer_form.required_post_code}}</label></p>
+			{{customer_form.required_phone.errors}}
+			<p><label for="required_phone">Phone#:{{customer_form.required_phone}}</label></p>
+			{{customer_form.required_fax.errors}}
+			<p><label for="required_fax">Fax#:{{customer_form.required_fax}}</label></p>
+			{{customer_form.required_email.errors}}
+			<p><label for="required_email">Email:{{customer_form.required_email}}</label></p>
+			<p><label for="required_id">{{customer_form.required_id}}</label></p>
+		</div>
+		<div class="rows">
+			<div>
+				<input type="button" id="btnAdd" value="new row"/>
+				<input type="button" id="btnDel" value="delete row"/>
+			</div>
+			<div id="input1" class="clonedInput">
+				{{row_form.battery_description1.errors}}
+				Description: {{row_form.battery_description1}}
+				{{row_form.type_number1.errors}}
+				Type#: {{row_form.type_number1}}
+				{{row_form.vkb_number1.errors}}
+				VKB#: {{row_form.vkb_number1}}
+				<br/>
+				{{row_form.quantity1.errors}}
+				Quantity: {{row_form.quantity1}}
+				{{row_form.price1.errors}}
+				Price: {{row_form.price1}}
+				<hr/>
+			</div>
+		</div>
+		<input type = "submit" value = "create"/>
+	</form>
+</div>
+{% endblock %}

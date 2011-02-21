@@ -1,0 +1,52 @@
+{% extends "project_list_base.html" %}
+
+{% block content %}
+<div id="create_or_edit">
+	<form method = "POST" action="">
+		<h3> VIEW </h3>
+		<div class="formSection"> 
+			<label for = "date">Date: {{quote.date}}</label><br/>
+			<label for = "inquiry_date">Inquiry Date: {{quote.inquiry_date}}</label><br/>
+			<label for = "fob">fob: {{quote.fob}}</label><br/>
+			<label for = "terms">terms: {{quote.terms}}</label><br/>
+			<label for = "signature1_name">Signature1: {{quote.signature1_name}}</label><br/>
+			<label for = "signature1_title">{{quote.signature1_title}}</label><br/>
+			<label for = "signature2_name">Signature2: {{quote.signature2_name}}</label><br/>
+			<label for = "signature2_title">{{quote.signature2_title}}</label><br/>
+			<label for = "signature3_name">Signature3: {{quote.signature3_name}}</label><br/>
+			<label for = "signature3_title">{{quote.signature3_title}}</label><br/>
+		</div>
+		<div class="formSection"> 
+			<h1>Customer:</h1>
+			{{quote.customer_company}}<br/>
+			ATTN:{{quote.customer_attention}}<br/>
+			{{quote.customer_address_line1}}<br/>
+			{% if quote.customer_line2 %} {{quote.customer_address_line2}}<br/>
+			{% else %}{{quote.customer_city}}, {{quote.customer_state}} {{quote.customer_post_code}}<br/>
+			{% endif %}
+			{% if quote.customer_line2 %} {{quote.customer_city}}, {{quote.customer_state}} {{quote.customer_post_code}}<br/>{% endif %}
+			{{quote.customer_phone}}<br/>
+		</div>
+		<div class="formSection"> 
+			<table>
+				<tr>
+					<th>Part </th>
+					<th>Quantity </th>
+					<th>Price </th>
+					<th>Margin </th>
+				</tr>
+			{% for row in rows %}
+				<tr class="link" link="#">
+					<td>{% firstof row.battery_pack row.battery row.battery_description %}</td>
+					<td>{{row.quantity}}pcs</td>
+					<td>${{row.price}}</td>
+					<td>{{row.margin}}%</td>
+				</tr>
+			{% endfor %}
+			</table>
+		</div>
+		<input type = "submit" value = "Download Doc File"/>
+	</form>
+</div>
+{% endblock %}
+

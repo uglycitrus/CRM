@@ -1,0 +1,60 @@
+{% extends "project_list_base.html" %}
+
+{% block content %}
+
+{% block top%}{% endblock %}
+
+<div>
+	<form method = "POST" action="">
+		<div class="formSection">
+			{{form.firstname.errors}}
+			<label for = "firstname">First Name: {{form.firstname}}</label><br/>
+			{{form.lastname.errors}}
+			<label for = "lastname">Last Name: {{form.lastname}}</label><br/>
+			{{form.company.errors}}
+			<label for = "company">Company: {{form.company}}</label><br/>
+			{{form.title.errors}}
+			<label for = "title">Job Title: {{form.title}}</label><br/>
+		</div>
+		<div class="formSection">
+			{{form.cell.errors}}
+			<label for = "cell"> Cell#: {{form.cell}}</label><br/>
+			{{form.landline.errors}}
+			<label for = "landline"> Office#: {{form.landline}}</label><br/>
+			{{form.fax.errors}}
+			<label for = "fax"> Fax#: {{form.fax}}</label><br/>
+			{{form.email.errors}}
+			<label for = "email">Email: {{form.email}}</label><br/>
+		</div>
+		<div class="formSection">
+			{{form.primary_address_line1.errors}}
+			<label for = "primary_address_line1"> Address Line 1: {{form.primary_address_line1}}</label><br/>
+			{{form.primary_address_line2.errors}}
+			<label for = "primary_address_line2"> Address Line 2: {{form.primary_address_line2}}</label><br/>
+			{{form.primary_city.errors}}
+			<label for = "primary_city"> City: {{form.primary_city}}</label><br/>
+			{{form.primary_state.errors}}
+			<label for = "primary_state"> State: {{form.primary_state}}</label><br/>
+			{{form.primary_post_code.errors}}
+			<label for = "primary_post_code"> Post Code: {{form.primary_post_code}}</label><br/>
+		</div>
+		<div class="formSection">
+			{{form.secondary_address_line1.errors}}
+			<label for = "secondary_address_line1"> Address Line 1: {{form.secondary_address_line1}}</label><br/>
+			{{form.secondary_address_line2.errors}}
+			<label for = "secondary_address_line2"> Address Line 2: {{form.secondary_address_line2}}</label><br/>
+			{{form.secondary_city.errors}}
+			<label for = "secondary_city"> City: {{form.secondary_city}}</label><br/>
+			{{form.secondary_state.errors}}
+			<label for = "secondary_state"> State: {{form.secondary_state}}</label><br/>
+			{{form.secondary_post_code.errors}}
+			<label for = "secondary_post_code"> Post Code: {{form.secondary_post_code}}</label><br/>
+		</div>
+		<input type = "submit" value = "save"/>
+	</form>
+</div>
+
+{% block bottom %}{% endblock %}
+
+{% endblock %}
+

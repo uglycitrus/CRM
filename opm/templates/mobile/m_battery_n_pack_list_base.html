@@ -1,0 +1,83 @@
+{% extends "project_list_base.html" %}
+
+{% block content %}
+	<div id="control_bar">
+		{% block PackTitle%}{% endblock %}
+		<form method = "GET" action="">
+			<label for = "search">Search: {{form.search}}</label>
+			<input type = "submit" value = "search"/>
+		</form>
+		<div class="control_bar_navbar" id="horizontal_navbar">
+			<ul>
+				<li class="top-parent"><a href= "{% url pack_new %}">NEW PACK</a></li>
+			</ul>
+			<ul>
+				<li class="top-parent"> <a href= "{% url battery_new %}">NEW BATTERY</a></li>
+			</ul>
+			<ul>
+				<li class="top-parent">|</li>
+			</ul>
+			<ul> 
+				<li class="top-parent"><a href="{% url battery_list value='type' selection='Li_Ion' %}">
+						Rechargeable Li</a>
+					<ul>
+						<li class="parent"><a href="{% url battery_list value='chemistry' selection='LIC' %}">
+							cylindrical</a></li>
+						<li class="parent"><a href="{% url battery_list value='chemistry' selection='LPP' %}">
+							Li-Poly</a></li>
+						<li class="parent"><a href="{% url battery_list value='chemistry' selection='LIP' %}">
+							prismatic</a></li>
+					</ul>
+				</li> 
+			</ul>
+			<ul>
+				<li class="top-parent"><a href="{% url battery_list value='type' selection='Ni_MH' %}">
+						Rechargeable NiMH</a>
+					<ul>
+						<li class="parent"><a href="{% url battery_list value='chemistry' selection='NMC' %}">
+							cylindrical</a></li>
+						<li class="parent"><a href="{% url battery_list value='chemistry' selection='NMB' %}">
+							button</a></li>
+					</ul>
+				</li> 
+			</ul>
+			<ul>
+				<li class="top-parent"><a href="{% url battery_list value='type' selection='Primary' %}">
+						Primary</a>
+					<ul>
+						<li class="parent"><a href="{% url battery_list value='chemistry' selection='LiMnO2Button' %}">
+							Li-MnO2 coin</a></li>
+						<li class="parent"><a href="{% url battery_list value='chemistry' selection='LiMnO2Cylindrical' %}">
+							Li-MnO2 cylindrical</a></li>
+						<li class="parent"><a href="{% url battery_list value='chemistry' selection='LiSOCl2' %}">
+							Li-SOCl2 cylindrical</a></li>
+						<li class="parent"><a href="{% url battery_list value='chemistry' selection='Watch_Battery' %}">
+							AgO2</a></li>
+						<li class="parent"><a href="{% url battery_list value='chemistry' selection='Alkaline' %}">
+							Alkaline</a></li>
+						<li class="parent"><a href="{% url battery_list value='chemistry' selection='Hearing_Aid' %}">
+							Hearing Aid</a></li>
+					</ul>
+				</li> 
+			</ul>
+			<ul>
+				<li class="top-parent"><a href="{% url battery_list value='none' selection='none' %}"> All</a></li> 
+			</ul> 
+			<ul>
+				<li class="top-parent">|</li>
+			</ul>
+			<ul> 
+				<li class="top-parent"><a href="#">View</a>
+					<ul>
+						<li class="parent"><a id="dischargeOff" href="#">discharge info</a></li>
+						<li class="parent"><a id="chargeOff" href="#">charge info</a></li>
+						<li class="parent"><a id="temperatureOff" href="#">temperature info</a></li>
+						<li class="parent"><a id="mechanicalOff" href="#">mechanical info</a></li>
+					</ul>
+				</li> 
+			</ul>
+		</div>
+	</div>
+	{% block table %} {% endblock table %}
+{% endblock content %}
+

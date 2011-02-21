@@ -1,0 +1,252 @@
+{% extends "project_list_base.html" %}
+{% load pagination_tags %}
+{% load sorting_tags %}
+
+{% block content %}
+	<div id="control_bar">
+		<a href="{% url project_new %}">NEW PROJECT</a>
+		<form method = "POST" action="">
+			<div class='formSegment'>
+				<label for = "division">Division: {{form.division}}</label>
+				<label for = "region">Region: {{form.region}}</label>
+				<label for = "market_segment">Market Segment: {{form.market_segment}}</label>
+			</div>
+			<div class='formSegment'>
+				<label for = "customer">Customer: {{form.customer}}</label>
+				<label for = "sales_potential">Potential Over: {{form.sales_potential}}</label>
+				<input type = "submit" value = "search"/>
+			</div>
+		</form>
+
+		<div id="view_bar">
+			<ul> 
+				<li class="top-parent"><a href="#">View</a>
+					<ul>
+						<li class="parent"><a id="documentOff" href="#">documents</a>
+							<ul>
+								<li><a id="samplesOff" href="#">samples</a></li>
+								<li><a id="sprsOff" href="#">sprs</a></li>
+								<li><a id="quotesOff" href="#">quotes</a></li>
+								<li><a id="visitsOff" href="#">visits</a></li>
+							</ul>
+						</li>
+						<li class="parent"><a id="timingOff" href="#">time line</a></li>
+						<li class="parent"><a id="contactsOff" href="#">contacts</a></li>
+						<li class="parent"><a id="divisionsOff" href="#">division</a></li>
+						<li class="parent"><a id="regionsOff" href="#">region</a></li>
+						<li class="parent"><a id="segmentsOff" href="#">segment</a></li>
+					</ul>
+				</li> 
+			</ul>
+		</div>
+	</div>
+	{% if list %}
+	<div id="list">
+		<table>
+			<thead>
+				<tr>
+					<th id="division" class="tmpOff"> {% anchor division 'Division' %} </th>
+					<th id="region" class="tmpOff"> {% anchor region 'Region' %} </th>
+					<th id="segment" class="tmpOff"> {% anchor market_segment 'Segment' %} </th>
+					<th> {% anchor customer 'Customer' %} </th>
+					<th> {% anchor battery_description 'Battery' %} </th>
+					<th> {% anchor sales_potential 'Potential' %} </th>
+					<th id="primary_contacts" class="tmpOff"> {% anchor primary_contact 'Primary Contact' %} </th>
+					<th id="sales_reps" class="tmpOff"> {% anchor sales_rep 'Sales Rep' %} </th>
+					<th id="project_managers" class="tmpOff"> {% anchor project_manager 'Project Manger' %} </th>
+					<th id="timing" class="tmpOff">
+						<table>
+							<tr>
+								<th colspan="5">Timing</th>
+							</tr>
+							<tr>
+								<th>Prototype Verification</th>
+								<th>Design Verification</th>
+								<th>Manufacturing Verification</th>
+								<th>Production Verification</th>
+								<th>End of Life</th>
+							</tr>
+						</table>
+					</th>
+					<th id="samples" class="tmpOff">Samples</th>
+					<th id="spr" class="tmpOff">SPR's</th>
+					<th id="quote" class="tmpOff">Quotes</th>
+					<th id="document" class="tmpOff">Visits</th>
+				</tr>
+			</thead>
+			<tbody>
+
+			{% autosort list %}
+			{% autopaginate list 10 %}
+			{% for i in list %}
+			<tr class="link" link="{% url project_edit i.id %}">
+				{% if i.division %}<td id="division" class="tmpOff">{{i.division}}</td>
+				{% else %}<td id="division" class="tmpOff">---</td>
+				{% endif %}
+				{% if i.region %}
+					{% ifequal i.region 'E' %}
+					<td id="region" class="tmpOff">East</td>
+					{% endifequal %}
+					{% ifequal i.region 'C' %}
+					<td id="region" class="tmpOff">Central</td>
+					{% endifequal %}
+					{% ifequal i.region 'W' %}
+					<td id="region" class="tmpOff">West</td>
+					{% endifequal %}
+					{% ifequal i.region 'H' %}
+					<td id="region" class="tmpOff">House</td>
+					{% endifequal %}
+				{% else %}<td id="region" class="tmpOff">---</td>
+				{% endif %}
+				{% if i.market_segment %}<td id="segment" class="tmpOff">{{i.market_segment}}</td>
+				{% else %}<td id="segment" class="tmpOff">---</td>
+				{% endif %}
+				{% if i.customer %}<td>{{i.customer}}</td>
+				{% else %}<td>---</td>
+				{% endif %}
+
+				<td>
+					<table>
+						<tr>
+							{% if i.battery_description %}<td>{{i.battery_description}}</td>
+							{% else %}<td>---</td>
+							{% endif %}
+						</tr>
+						{% if i.battery %}
+						<tr>
+							<td><a href="{% url pack_list i.battery.type_number %}">{{i.battery }}</a>
+							{% if i.battery_pack %}
+							--<a href="{% url pack_edit i.battery_pack.vkb_number %}">{{i.battery_pack}}</a>
+							{% endif %}
+							</td>
+						</tr>
+						{% endif %}
+					</table>
+				</td>
+				
+				{% if i.sales_potential %}<td>{{i.sales_potential}}</td>
+				{% else %}<td>---</td>
+				{% endif %}
+				{% if i.primary_contact %} <td id="primary_contacts" class="tmpOff">{{i.primary_contact.firstname}} {{i.primary_contact.lastname}}</td>
+				{% else %} <td id="primary_contacts" class="tmpOff">---</td>
+				{% endif %}
+
+				{% if i.sales_rep %} <td id="sales_reps" class="tmpOff">{{i.sales_rep.firstname}} {{i.sales_rep.lastname}}</td>
+				{% else %} <td id="sales_reps" class="tmpOff">---</td>
+				{% endif %}
+
+				{% if i.project_manager %} <td id="project_managers" class="tmpOff">{{i.project_manager.firstname}} {{i.project_manager.lastname}}</td>
+				{% else %} <td id="project_managers" class="tmpOff">---</td>
+				{% endif %}
+
+				<td id="timing" class="tmpOff">
+					<table>
+						<tr>
+							<td>{{i.prototype_verification}}</td>
+							<td>{{i.design_verification}}</td>
+							<td>{{i.manufacturing_verification}}</td>
+							<td>{{i.production_verification}}</td>
+							<td>{{i.end_of_life}}</td>
+						</tr>
+					</table>
+				</td>
+				{% load opm_extras %}
+				{% load comparison %}
+				{% extend_samples i.id 3 %}
+				{% if samples %}
+				<td id="samples" class="tmpOff">
+					{% if_greater_or_equal count 3 %}
+					<h6>displaying 3/{{count}}</h6>
+					{% else %}
+					<h6>displaying {{count}}/{{count}}</h6>
+					{% endif_greater_or_equal %}
+					<table>
+						{% for sample in samples %}
+						<tr>
+							<th>{{sample.date|date:"M d \'y"}}</th>
+						</tr>
+						{% endfor %}
+						<tr>
+							<td><a href = "{% url sample_new i.id %}">RE-SAMPLE</a></td>
+						</tr>
+					</table>
+				</td>
+				{% else %}							
+				<td id="samples" class="tmpOff"><a href = "{% url sample_new i.id %}">SAMPLE</a></td>
+				{% endif %}
+
+				{% extend_spr i.id 3%}
+				{% if spr_list %}
+				<td id="spr" class="tmpOff">
+					{% if_greater_or_equal count 3 %}
+					<h6>displaying 3/{{count}}</h6>
+					{% else %}
+					<h6>displaying {{count}}/{{count}}</h6>
+					{% endif_greater_or_equal %}
+					<table>
+						{% for spr in spr_list %}
+						<tr>
+							<th>{{spr.date|date:"M d \'y"}}</th>
+							<th>SPR#{{spr.spr_number}}</th>
+						</tr>
+							{% extend_spr_rows spr.spr_number %}
+							{% for spr_row in spr_rows %}
+						<tr>	
+							<td>{{ spr_row.battery }}</td>
+							<td>{{ spr_row.quantity }}pcs</td>
+							<td>${{ spr_row.price }}</td>
+						</tr>	
+							{% endfor %}
+						{% endfor %}
+						<tr>
+							<td><a href = "{% url spr_new i.id %}">NEW SPR</a></td>
+						</tr>
+					</table>
+				</td>
+				{% else %}							
+				<td id="spr" class="tmpOff"><a href = "{% url spr_new i.id %}">NEW SPR</a></td>
+				{% endif %}	
+
+				{% extend_quotes i.id 3%}
+				{% if quotes %}
+				<td id="quote" class="tmpOff">
+					{% if_greater_or_equal count 3 %}
+					<h6>displaying 3/{{count}}</h6>
+					{% else %}
+					<h6>displaying {{count}}/{{count}}</h6>
+					{% endif_greater_or_equal %}
+					<table>
+						{% for quote in quotes %}
+						<tr>
+							<th>{{quote.date|date:"M d \'y"}}</th>
+							<th>Quote#{{quote.quote_number}}</th>
+						</tr>
+							{% extend_quote_rows quote.quote_number %}
+							{% for quote_row in quote_rows %}
+						<tr>	
+							<td>{{ quote_row.battery }}</td>
+							<td>{{ quote_row.quantity }}pcs</td>
+							<td>${{ quote_row.price }}</td>
+						</tr>	
+							{% endfor %}
+						{% endfor %}
+						<tr>
+							<td><a href = "{% url quote_new i.id %}">RE-QUOTE</a></td>
+						</tr>
+					</table>
+				</td>
+				{% else %}							
+				<td id="quote" class="tmpOff"><a href = "{% url quote_new i.id %}">QUOTE</a></td>
+				{% endif %}	
+				<td></td>
+			</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+		{% paginate %}
+	</div>
+	{% else %}
+	<p>No Projects Found</p>
+	{% endif %}
+{% endblock %}
+

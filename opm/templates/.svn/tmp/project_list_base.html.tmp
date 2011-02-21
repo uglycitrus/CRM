@@ -1,0 +1,84 @@
+<<<<<<< .mine
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title>VARTA OPM</title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1038.29">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times; min-height: 14.0px}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times}
+    li.li2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times}
+    li.li3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times; color: #0000ee}
+    span.s1 {text-decoration: underline}
+    ul.ul1 {list-style-type: disc}
+  </style>
+</head>
+<body>
+<p class="p1"><br></p>
+<p class="p1"><br></p>
+<p class="p2">{% block link_parent%}</p>
+<ul class="ul1">
+  <li class="li3"><a href="file:///Users/willomeara/Desktop/app01/templates/%7B%25%20url%20project_list%25%7D"><span class="s1">projects</span></a></li>
+  <li class="li3"><a href="file:///Users/willomeara/Desktop/app01/templates/%7B%25%20url%20battery_list%20value='none'%20selection='none'%20%25%7D"><span class="s1">batteries</span></a></li>
+  <li class="li3"><a href="file:///Users/willomeara/Desktop/app01/templates/%7B%25%20url%20contact_list%20%25%7D"><span class="s1">contacts</span></a></li>
+  <li class="li3"><a href="file:///Users/willomeara/Desktop/app01/templates/%7B%25%20url%20sample_list%25%7D"><span class="s1">samples</span></a></li>
+  <li class="li3"><a href="file:///Users/willomeara/Desktop/app01/templates/%7B%25%20url%20spr_list%25%7D"><span class="s1">sprs</span></a></li>
+  <li class="li3"><a href="file:///Users/willomeara/Desktop/app01/templates/%7B%25%20url%20quote_list%20%25%7D"><span class="s1">quotes</span></a></li>
+  <li class="li3"><span class="s1">call reports</span></li>
+  <li class="li3"><a href="file:///Users/willomeara/Desktop/app01/templates/%7B%25%20url%20upload_list%20%25%7D"><span class="s1">uploads</span></a></li>
+</ul>
+<ul class="ul1">
+  <li class="li3"><a href="file:///Users/willomeara/Desktop/app01/templates/%7B%25%20url%20logout%20%25%7D"><span class="s1">logout</span></a></li>
+  <li class="li2">logged in as {{user}}</li>
+</ul>
+<p class="p2">{% endblock %} {% block content%}{%endblock%}</p>
+</body>
+</html>
+=======
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8">
+		<link rel="stylesheet" type="text/css" href="/site_media/styles/screen.css" />
+		<title>VARTA OPM</title>
+	</head>
+	
+	<body id="{{tab}}">
+		<div id="root">
+			<div id="header">
+				{% block link_parent%}
+				<div id="links">
+					<ul>
+						<li class="projects" ><a href="{% url project_list%}">projects</a></li>
+						<li class="batteries" ><a href="{% url battery_list value='none' selection='none' %}">batteries</a></li>
+						<li class="contacts" ><a href="{% url contact_list %}">contacts</a></li>
+						<li class="samples" ><a href="{% url sample_list%}">samples</a></li>
+						<li class="sprs" ><a href="{% url spr_list%}">sprs</a></li>
+						<li class="quotes" ><a href="{% url quote_list %}">quotes</a></li>
+						<li class="reports" ><a href="#">call reports</a></li>
+						<li class="uploads" ><a href="{% url upload_list %}">uploads</a></li>
+					</ul>
+				</div>
+				<div id="account">
+					<ul>
+						<li><a href="{% url logout %}">logout</a></li>
+						<li>logged in as {{user}}</li>
+					</ul>
+				</div>
+			</div>
+			{% endblock %}
+
+			{% block content%}{%endblock%}
+		</div>
+		<script type="text/javascript" src="/site_media/scripts/jquery.js"></script>
+		<script type="text/javascript" src="/site_media/scripts/development-bundle/ui/ui.core.js"></script>
+		<script type="text/javascript" src="/site_media/scripts/development-bundle/ui/ui.datepicker.js"></script>
+		<script type="text/javascript" src="/site_media/scripts/main.js"></script>
+		<script type="text/javascript" src="/site_media/scripts/view.js"></script>
+		<script type="text/javascript" src="/site_media/scripts/new_row.js"></script>
+	</body>
+</html>
+>>>>>>> .r35

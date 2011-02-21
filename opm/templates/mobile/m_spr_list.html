@@ -1,0 +1,38 @@
+{% extends "project_list_base.html" %}
+
+{% block content %}
+{% load pagination_tags %}
+{% load sorting_tags %}
+	<div id="control_bar">
+		<form method = "GET" action="">
+			<label for = "search">Search: {{form.search}}</label>
+			<input type = "submit" value = "search"/>
+		</form>
+
+	</div>
+	<div id="list">
+		<table>
+			<tr>
+				<th> Date </th>
+				<th> Customer </th>
+				<th>{% anchor battery_pack 'Part' %} </th>
+				<th>{% anchor quantity 'Quantity' %} </th>
+				<th>{% anchor price 'Price' %} </th>
+				<th>{% anchor margin 'Margin' %} </th>
+			</tr>
+		{% autosort list %}
+		{% autopaginate list %}
+		{% for i in list %}
+			<tr class="link" link="{% url spr_edit_or_view i.spr.id %}">
+				<td>{{i.spr.edited_date}}</td>
+				<td>{{i.spr.customer_company}}</td>
+				<td>{% firstof i.battery_pack i.battery i.battery_description %}</td>
+				<td>{{i.quantity}}pcs</td>
+				<td>${{i.price}}</td>
+				<td>{{i.margin}}%</td>
+			</tr>
+		{% endfor %}
+		</table>
+		{% paginate %}
+	</div>
+{% endblock %}

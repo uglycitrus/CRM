@@ -1,0 +1,29 @@
+{% extends "pop_up_base.html" %}
+
+{% block content %}
+	<div id="control_bar">
+		<a class="contact_new_popup" link="{%url upload_new_popup %}" href="#">NEW UPLOAD</a>
+		<form method = "GET" action="">
+			<label for = "search">Search: {{form.search}}</label>
+			<input type = "submit" value = "search"/>
+		</form>
+	</div>
+	{% if list %}
+	<div id="list">
+		<table id="{{contact_type}}">
+			<tr>
+				<th>title</th>
+				<th>file</th>
+			</tr>
+			{% for i in list %}
+				<tr class="link" link="{%url link_a_file_confirm link_type, id, i.id%}">
+					<td>{{i.file_title}}</td>
+					<td>{{i.file}}</td>
+				</tr>
+			{% endfor %}
+		</table>
+	</div>
+	{% else %}
+	<p>Search to find a File</p>
+	{% endif %}
+{% endblock %}

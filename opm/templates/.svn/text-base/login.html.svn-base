@@ -1,0 +1,15 @@
+{% extends "project_list_base.html" %}
+
+{% block link_parent %}{% endblock %}
+
+{% block content %}
+	<div>
+		<p>Varta<p>
+		<form method = "POST" action="">
+			<label for = "username">username: {{form.username}}</label>
+			<label for = "password">password: {{form.password}}</label>
+			<input type = "submit" value = "login"/>
+		</form>
+	</div>
+{% endblock %}
+	

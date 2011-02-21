@@ -1,0 +1,52 @@
+{% extends "project_list_base.html" %}
+
+{% block content %}
+
+	{% block top%}
+		<div id="control_bar">
+			<h1>New Pack (VKB#)</h1>
+		</div>
+	{% endblock %}
+
+	<div>
+		<form method = "POST" enctype="multipart/form-data" action="">
+			<div class="formSection">
+				{{form.vkb_number.errors}}
+				<p><label for = "vkb_number">vkb_number: {{form.vkb_number}}</label></p>
+				{{form.drawing_number.errors}}
+				<p><label for = "drawing_number">drawing_number: {{form.drawing_number}}</label></p>
+				{{form.drawing.errors}}
+				<p><label for = "drawing">drawing: {{form.drawing}}</label></p>
+				{{form.chemistry.errors}}
+				<p><label for = "chemistry">chemistry: {{form.chemistry}}</label></p>
+				{{form.type.errors}}
+				<p><label for = "type">type: {{form.type}}</label></p>
+			</div>
+			<div class="formSection">
+				{{form.capacity.errors}}
+				<p><label for = "capacity">capacity: {{form.capacity}}</label></p>
+				{{form.voltage.errors}}
+				<p><label for = "voltage">voltage: {{form.voltage}}</label></p>
+				{{form.max_cont.errors}}
+				<p><label for = "max_cont">max_cont: {{form.max_cont}}</label></p>
+				{{form.max_pulse.errors}}
+				<p><label for = "max_pulse">max_pulse: {{form.max_pulse}}</label></p>
+			</div>
+			<div class="formSection">
+				{{form.configuration.errors}}
+				<p><label for = "configuration">configuration: {{form.configuration}}</label></p>
+				{{form.connection.errors}}
+				<p><label for = "connection">connection: {{form.connection}}</label></p>
+				{{form.series_cells.errors}}
+				<p><label for = "series_cells">series_cells: {{form.series_cells}}</label></p>
+				{{form.parallel_cells.errors}}
+				<p><label for = "parallel_cells">parallel_cells: {{form.parallel_cells}}</label></p>
+			</div>
+		{% block submit_button %}<input type = "submit" value = "save"/>{% endblock %}
+		</form>
+	</div>
+
+	{% block bottom %}{% endblock %}
+
+{% endblock %}
+

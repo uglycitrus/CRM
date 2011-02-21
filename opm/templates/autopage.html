@@ -1,0 +1,18 @@
+{% load sorting_tags %}
+{% load pagination_tags %}
+
+	<table>
+			<tr>
+				<th> {% anchor firstname 'First Name' %} </th>
+				<th>{% anchor lastname Last %} </th>
+			</tr>
+		{% autosort test_list %}
+		{% autopaginate test_list 4 %}
+		{% for i in test_list %}
+			<tr>
+				<td>{{i.firstname}}</td>
+				<td>{{i.lastname}}</td>
+			</tr>
+		{% endfor %}
+		{% paginate %}
+	</table>

@@ -1,0 +1,114 @@
+{% extends "battery_n_pack_list_base.html" %}
+{% load pagination_tags %}
+{% load sorting_tags %}
+{% block PackTitle%}
+	<div class="control_bar_section">
+	<h2> {{battery.type_description}} / Type# {{battery.type_number}} </h2>
+		&nbsp &nbsp &nbsp 
+		{% if battery.voltage %}
+			{{battery.voltage}}V, &nbsp
+		{% endif %} 
+		{% if battery.capacity %}
+			{{battery.capacity}}mAh, &nbsp
+		{% endif %} 
+		{% if battery.max_cont %}
+			Max Cont. Discharge:{{battery.max_cont}}mA
+		{% endif %} 
+		<a href="{% url upload_view battery.type_number %}" target="_blank">datasheet</a>
+	<br/>
+	{% if battery.min_storage_temp and battery.max_storage_temp %}
+		<br/>store at {{battery.min_storage_temp}} to {{battery.max_storage_temp}}<br/>
+	{% endif %}
+	{% load opm_extras %}
+
+	</div>
+	<div class="control_bar_section">
+	{% extend_files 'Battery' battery.id %}
+	{% if files %}
+		<u>Linked Files:</u><br/>
+		{% for file in files %}
+			&nbsp &nbsp &nbsp <a target="new window" href="{% url upload_view file.upload.file%}">{{file.upload.file_title}}</a><br/>
+		{% endfor %}
+	{% endif %}
+		&nbsp &nbsp <button class="link_file" link="{% url link_a_file "battery", battery.id %}" type="button">Link a File</button> <br/>
+	</div>
+	<div class="control_bar_section">
+	{% if projects %}
+	<u>Projects:</u><br/>
+	<table>
+		<thead>
+			<tr>
+				<th>Region</th>
+				<th>Customer</th>
+				<th>Potential</th>
+			</tr>
+		</thead>
+			{% for i in projects %}
+			<tr class="link" link="{% url project_edit i.id %}">
+				{% if i.region %}
+					{% ifequal i.region 'E' %}
+					<td>East</td>
+					{% endifequal %}
+					{% ifequal i.region 'C' %}
+					<td>Central</td>
+					{% endifequal %}
+					{% ifequal i.region 'W' %}
+					<td>West</td>
+					{% endifequal %}
+					{% ifequal i.region 'H' %}
+					<td>House</td>
+					{% endifequal %}
+				{% else %}<td>---</td>
+				{% endif %}
+				{% if i.customer %}<td>{{i.customer}}</td>
+				{% else %}<td>---</td>
+				{% endif %}
+				{% if i.sales_potential %}<td>{{i.sales_potential}}</td>
+				{% else %}<td>---</td>
+				{% endif %}
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	{% endif %}
+	</div>
+{% endblock %}
+
+{% if list %}
+{% block table %}
+	<div id="list">
+		<table>
+			<thead>
+				<tr>
+					<th> {% anchor vkb_number 'vkb_number' %} </th> 
+					<th> {% anchor drawing_number 'drawing_number' %} </th> 
+					<th> {% anchor capacity 'Capacity' %} </th> 
+					<th> {% anchor voltage 'voltage' %} </th> 
+					<th> {% anchor max_cont 'max_cont' %} </th> 
+					<th> {% anchor max_pulse 'max_pulse' %} </th> 
+					<th> {% anchor series_cells 'series_cells' %} </th> 
+					<th> {% anchor parallel_cells 'parallel_cells' %} </th> 
+				</tr>
+			</thead>
+			<tbody>
+				{% autosort list %}
+				{% autopaginate list %}
+				{% for i in list %}
+				<tr class="link" link="{% url pack_edit i.vkb_number %}">
+					<th> {{ i.vkb_number }} <a href="{% url upload_view i.vkb_number %}" target="_blank">drawing</a></th> 
+					<th> {{ i.drawing_number }} </th> 
+					<th> {{ i.capacity }} </th> 
+					<th> {{ i.voltage }} </th> 
+					<th> {{ i.max_cont }} </th> 
+					<th> {{ i.max_pulse }} </th> 
+					<th> {{ i.series_cells }} </th> 
+					<th> {{ i.parallel_cells }} </th> 
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		{% paginate %}
+	</div>
+{% endblock %}
+{% endif %}
+

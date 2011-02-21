@@ -1,0 +1,55 @@
+{% extends "project_list_base.html" %}
+
+
+{% block content %}
+	{% block top%}
+		<div id="control_bar">
+			<h1>New Battery (bare cell)</h1>
+		</div>
+	{% endblock %}
+	<div>
+		<form method = "POST" enctype="multipart/form-data" action="">
+			<div class="formSection">
+				{{form.type_number.errors}}
+				<p><label for = "type_number">type_number: {{form.type_number}}</label></p>
+				{{form.type_description.errors}}
+				<p><label for = "type_description">type_description: {{form.type_description}}</label></p>
+				{{form.datasheet.errors}}
+				<p><label for = "datasheet">datasheet: {{form.datasheet}}</label></p>
+				{{form.chemistry.errors}}
+				<p><label for = "chemistry">chemistry: {{form.chemistry}}</label></p>
+				{{form.type.errors}}
+				<p><label for = "type">type: {{form.type}}</label></p>
+				{{form.discontinued.errors}}
+				<p><label for = "discontinued">discontinued: {{form.discontinued}}</label></p>
+			</div>
+			<div class="formSection">
+				{{form.capacity.errors}}
+				<p><label for = "capacity">capacity: {{form.capacity}}</label></p>
+				{{form.voltage.errors}}
+				<p><label for = "voltage">voltage: {{form.voltage}}</label></p>
+				{{form.max_cont.errors}}
+				<p><label for = "max_cont">max_cont: {{form.max_cont}}</label></p>
+				{{form.max_pulse.errors}}
+				<p><label for = "max_pulse">max_pulse: {{form.max_pulse}}</label></p>
+			</div>
+			<div class="formSection">
+				{{form.max_storage_temp.errors}}
+				<p><label for = "max_storage_temp">max_storage_temp: {{form.max_storage_temp}}</label></p>
+				{{form.min_storage_temp.errors}}
+				<p><label for = "min_storage_temp">min_storage_temp: {{form.min_storage_temp}}</label></p>
+				{{form.max_discharge_temp.errors}}
+				<p><label for = "max_discharge_temp">max_discharge_temp: {{form.max_discharge_temp}}</label></p>
+				{{form.min_discharge_temp.errors}}
+				<p><label for = "min_discharge_temp">min_discharge_temp: {{form.min_discharge_temp}}</label></p>
+				{{form.max_charge_temp.errors}}
+				<p><label for = "max_charge_temp">max_charge_temp: {{form.max_charge_temp}}</label></p>
+				{{form.min_charge_temp.errors}}
+				<p><label for = "min_charge_temp">min_charge_temp: {{form.min_charge_temp}}</label></p>
+			</div>
+		{% block submit_button %}<input type = "submit" value = "save"/>{% endblock %}
+		</form>
+	</div>
+{% endblock %}
+
+{% block bottom %}{% endblock %}

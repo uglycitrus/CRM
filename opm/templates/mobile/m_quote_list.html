@@ -1,0 +1,33 @@
+{% extends "project_list_base.html" %}
+
+{% block content %}
+{% load pagination_tags %}
+{% load sorting_tags %}
+	<div id="control_bar">
+		<form method = "GET" action="">
+			<label for = "search">Search: {{form.search}}</label>
+			<input type = "submit" value = "search"/>
+		</form>
+
+	</div>
+	<div id="list">
+		<table>
+			<tr>
+				<th>{% anchor i.quote.edited_date Date %} </th>
+				<th>{% anchor i.quote.customer_company Customer %} </th>
+				<th>{% anchor quantity Quantity %} </th>
+				<th>{% anchor price Price %} </th>
+		{% autosort list %}
+		{% autopaginate list %}
+		{% for i in list %}
+			<tr class="link" link="{% url quote_edit_or_view i.quote.id %}">
+				<td>{{i.quote.edited_date}}</td>
+				<td>{{i.quote.customer_company}}</td>
+				<td>{{i.quantity}}pcs</td>
+				<td>${{i.price}}</td>
+			</tr>
+		{% endfor %}
+		</table>
+		{% paginate %}
+	</div>
+{% endblock %}

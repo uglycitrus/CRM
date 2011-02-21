@@ -1,0 +1,36 @@
+{% extends "project_list_base.html" %}
+
+{% block content %}
+{% load pagination_tags %}
+{% load sorting_tags %}
+	<div id="control_bar">
+		<a href="{%url sample_new_independent %}">NEW SAMPLE</a>
+		<form method = "GET" action="">
+			<label for = "search">Search: {{form.search}}</label>
+			<input type = "submit" value = "search"/>
+		</form>
+
+	</div>
+	<div id="list">
+		<table>
+			<tr>
+				<td>{% anchor date 'Date' %}</td>
+				<td>{% anchor sample_number 'Sample Number' %}</td>
+				<td>{% anchor ship_to_company 'Ship To' %}</td>
+				<td>{% anchor end_user_company 'End User' %}</td>
+				<td>Sample</td>
+			</tr>
+		{% autosort list %}
+		{% autopaginate list %}
+		{% for i in list %}
+			<tr>
+				<td>{{i.date}}</td>
+				<td>{{i.sample_number}}</td>
+				<td>{{i.ship_to_company}}</td>
+				<td>{{i.end_user_company}}</td>
+				<td>{{i.battery}}</td>
+			</tr>
+		{% endfor %}
+		</table>
+	</div>
+{% endblock %}

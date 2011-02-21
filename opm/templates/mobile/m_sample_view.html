@@ -1,0 +1,39 @@
+{% extends "project_list_base.html" %}
+
+{% block content %}
+<div id="create_or_edit">
+	<form method = "POST" action="">
+		<h3> VIEW </h3>
+		<div class="formSection"> 
+			Date: {{sample.date|date:'m/d/y'}}<br/>
+			Engineer:{{sample.engineer}}<br/>
+			Inside Sales:{{sample.inside_sales}}<br/>
+			Battery: {{sample.battery}}<br/>
+			Sample Description: {{sample.battery_description}}<br/>
+		</div>
+		<div class="formSection"> 
+			<h1>End User</h1>
+			{{sample.end_user_company}}<br/>
+			ATTN:{{sample.end_user_attention}}<br/>
+			{{sample.end_user_address_line1}}<br/>
+			{% if sample.end_user_line2 %} {{sample.end_user_address_line2}}<br/>
+			{% else %}{{sample.end_user_city}}, {{sample.end_user_state}} {{sample.end_user_post_code}}<br/>
+			{% endif %}
+			{% if sample.end_user_line2 %} {{sample.end_user_city}}, {{sample.end_user_state}} {{sample.end_user_post_code}}<br/>{% endif %}
+			{{sample.end_user_phone}}<br/>
+		</div>
+		<div class="formSection"> 
+			<h1>Ship To</h1>
+			{{sample.ship_to_company}}<br/>
+			ATTN:{{sample.ship_to_attention}}<br/>
+			{{sample.ship_to_address_line1}}<br/>
+			{% if sample.ship_to_line2 %} {{sample.ship_to_address_line2}}<br/>
+			{% else %}{{sample.ship_to_city}}, {{sample.ship_to_state}} {{sample.ship_to_post_code}}<br/>
+			{% endif %}
+			{% if sample.ship_to_line2 %} {{sample.ship_to_city}}, {{sample.ship_to_state}} {{sample.ship_to_post_code}}<br/>{% endif %}
+			{{sample.ship_to_phone}}<br/>
+		</div>
+		<input type = "submit" value = "create"/>
+	</form>
+</div>
+{% endblock %}

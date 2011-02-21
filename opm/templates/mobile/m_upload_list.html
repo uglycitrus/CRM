@@ -1,0 +1,26 @@
+{% extends "project_list_base.html" %}
+
+{% block content %}
+	<div id="control_bar">
+		<a href="{%url upload_new %}">UPLOAD FILE</a>
+		<form method = "POST" action="">
+			<label for = "search">Search: {{form.search}}</label>
+			<input type = "submit" value = "search"/>
+		</form>
+
+	</div>
+	<div id="list">
+		<table>
+			<tr>
+				<th>title</th>
+				<th>file</th>
+			</tr>
+		{% for i in list %}
+			<tr class="link" link="{% url upload_view i.file%}">
+				<td><a href="{% url upload_edit i.id%}">edit</a> {{i.file_title}}</td>
+				<td>{{i.file|cut:"uploads/"}}</td>
+			</tr>
+		{% endfor %}
+		</table>
+	</div>
+{% endblock %}

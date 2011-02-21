@@ -1,0 +1,28 @@
+{% extends "project_list_base.html" %}
+
+{% block content %}
+	<div id="control_bar">
+		<form method = "POST" action="">
+			<label for = "search">Search: {{form.search}}</label>
+			<input type = "submit" value = "search"/>
+		</form>
+
+	</div>
+	<div id="list">
+		<table>
+			<tr>
+				<td>Date</td>
+				<td>Customer</td>
+				<td>Quantity</td>
+				<td>Price</td>
+		{% for i in list %}
+			<tr>
+				<td>{{i.quote.edited_date}}</td>
+				<td>{{i.quote.customer_company}}</td>
+				<td>{{i.quantity}}pcs</td>
+				<td>${{i.price}}</td>
+			</tr>
+		{% endfor %}
+		</table>
+	</div>
+{% endblock %}
