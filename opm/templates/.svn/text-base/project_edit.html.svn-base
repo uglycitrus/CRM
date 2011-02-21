@@ -1,9 +1,0 @@
-{% extends "project_new.html" %}
-
-{% block top %}
-	<div id="control_bar">
-		<h1>{{project.customer}} {{project.battery_description}}</h1>
-	</div>
-{% endblock %}
-
-
