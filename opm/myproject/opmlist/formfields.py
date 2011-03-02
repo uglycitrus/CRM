@@ -6,7 +6,7 @@ import re
 class VKBField(forms.Field):
 	def clean(self, value):
 		"""
-		check that a VKB# is 10 or 11 digits
+		check that a VKB# is 10 or 11 digits, and there's a Pack with the entered VKB#
 		"""
 		if value:
 			if not re.match(r'^\d{10}$',value) and not re.match(r'^\d{11}$',value):
@@ -22,7 +22,7 @@ class VKBField(forms.Field):
 class New_VKBField(forms.Field):
 	def clean(self, value):
 		"""
-		check that a VKB# is 10 or 11 digits
+		check that a VKB# is 10 or 11 digits, and there's a Battery with a type_number matching the beginning of the VKB#
 		"""
 		if not re.match(r'^\d{10}$',value) and not re.match(r'^\d{11}$',value):
 			raise forms.ValidationError('VKB# must be 10 or 11 digits')

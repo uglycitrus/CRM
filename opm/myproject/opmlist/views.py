@@ -47,6 +47,7 @@ from myproject.opmlist.forms import SprEditForm
 from myproject.opmlist.forms import LogInForm
 from myproject.opmlist.forms import SearchForm
 from myproject.opmlist.forms import BatteryEditForm
+from myproject.opmlist.forms import VKBForm
 from myproject.opmlist.forms import PackEditForm
 from myproject.opmlist.forms import UploadEditForm
  
@@ -167,43 +168,19 @@ def project_view(request, id):
 def pack_new(request):
 	tab = 'battery'
 	user = request.user
+	form = PackEditForm()
+	vkb_form = VKBForm()
 	if request.method == 'POST':
 		form = PackEditForm(request.POST, request.FILES)
-		if form.is_valid():
+		vkb_form = VKBForm(request.POST)
+		if form.is_valid() and vkb_form.is_valid():
 			drawing = request.FILES['drawing']
-			drawing_number = form.cleaned_data['drawing_number']
-			vkb_number,battery = form.cleaned_data['vkb_number']
-			chemistry = form.cleaned_data['chemistry']
-			type = form.cleaned_data['type']
-			configuration = form.cleaned_data['configuration']
-			connection = form.cleaned_data['connection']
-			series_cells = form.cleaned_data['series_cells']
-			parallel_cells = form.cleaned_data['parallel_cells']
-			capacity = form.cleaned_data['capacity']
-			voltage = form.cleaned_data['voltage']
-			max_cont = form.cleaned_data['max_cont']
-			max_pulse = form.cleaned_data['max_pulse']
-			pack, created = Pack.objects.get_or_create(vkb_number = vkb_number)
-			if created:
-				pack.battery = battery
-				pack.vkb_number = vkb_number
-				pack.drawing_number = drawing_number
-				pack.chemistry = chemistry
-				pack.type = type
-				pack.configuration = configuration
-				pack.connection = connection
-				pack.series_cells = series_cells
-				pack.parallel_cells = parallel_cells
-				pack.capacity = capacity
-				pack.voltage = voltage
-				pack.max_cont = max_cont
-				pack.max_pulse = max_pulse
+			pack = None
+			pack = PackEditFormHandler(pack, form, vkb_form, drawing)
 			pack.save()
-			pack.drawing.save(vkb_number+'.pdf', drawing)
-			return HttpResponseRedirect(reverse('pack_list', args = [battery.type_number]))
-	else:
-		form = PackEditForm()
-	return render_to_response('pack_new.html', {'tab':tab,'form': form, 'user':user})
+			pack.drawing.save(pack.vkb_number+'.pdf', drawing)
+			return HttpResponseRedirect(reverse('pack_list', args = [pack.battery.type_number]))
+	return render_to_response('pack_new.html', {'tab':tab,'form': form, 'vkb_form':vkb_form, 'user':user})
 
 @login_required
 def pack_list(request, type_number):
@@ -220,52 +197,19 @@ def pack_edit(request, vkb_number):
 	user = request.user
 	pack = Pack.objects.get(vkb_number = vkb_number)
 	projects = Project.objects.filter(Q(battery_pack = pack))
-	form = PackEditForm(initial = {
-			'vkb_number':pack.vkb_number, 
-			'drawing_number':pack.drawing_number,
-			'chemistry':pack.chemistry, 
-			'type':pack.type, 
-			'configuration':pack.configuration, 
-			'series_cells':pack.series_cells, 
-			'parallel_cells':pack.parallel_cells, 
-			'capacity':pack.capacity, 
-			'voltage':pack.voltage, 
-			'max_cont':pack.max_cont, 
-			'max_pulse':pack.max_pulse 
-		})
+	form, vkb_form = InitializePackEditForm(pack)
 	if request.method == 'POST':
 		form = PackEditForm(request.POST, request.FILES)
-		if form.is_valid():
-			vkb_number,battery = form.cleaned_data['vkb_number']
-			chemistry = form.cleaned_data['chemistry']
-			type = form.cleaned_data['type']
-			configuration = form.cleaned_data['configuration']
-			series_cells = form.cleaned_data['series_cells']
-			parallel_cells = form.cleaned_data['parallel_cells']
-			capacity = form.cleaned_data['capacity']
-			voltage = form.cleaned_data['voltage']
-			max_cont = form.cleaned_data['max_cont']
-			max_pulse = form.cleaned_data['max_pulse']
-			pack, created = Pack.objects.get_or_create(vkb_number = vkb_number)
-			if not created:
-				pack.battery = battery
-				pack.vkb_number = vkb_number
-				pack.drawing = vkb_number
-				pack.chemistry = chemistry
-				pack.type = type
-				pack.configuration = configuration
-				pack.series_cells = series_cells
-				pack.parallel_cells = parallel_cells
-				pack.capacity = capacity
-				pack.voltage = voltage
-				pack.max_cont = max_cont
-				pack.max_pulse = max_pulse
+		vkb_form = VKBForm(request.POST)
+		if form.is_valid() and vkb_form.is_valid():
+			if request.FILES: drawing = request.FILES['drawing']
+			else: drawing = None
+			pack = PackEditFormHandler(pack, form, vkb_form, drawing)
 			pack.save()
-			if request.FILES:
-				drawing = request.FILES['drawing']
+			if drawing:
 				pack.drawing.save(vkb_number, drawing)
-			return HttpResponseRedirect(reverse('pack_list', args = [battery.type_number]))
-	return render_to_response('pack_edit.html', {'tab':tab,'form': form, 'user':user, 'projects':projects, 'pack':pack})
+			return HttpResponseRedirect(reverse('pack_list', args = [pack.battery.type_number]))
+	return render_to_response('pack_edit.html', {'tab':tab,'form': form, 'vkb_form': vkb_form, 'user':user, 'projects':projects, 'pack':pack})
 
 @login_required
 def battery_new(request):
@@ -423,15 +367,10 @@ def sample_list(request):
 	"""
 	tab = 'sample'
 	user = request.user
-	form = SearchForm()
-	list = Sample.objects.all()
-	if request.method == 'GET':
-		form = SearchForm(request.GET)
-		search = request.GET.get('search') 
-		list = SampleSearch(search)
-		return render_to_response('sample_list.html',{'tab':tab, 'list':list, 'form':form, 'user':user}, context_instance=RequestContext(request))
-	else:
-		return render_to_response('sample_list.html',{'tab':tab, 'list':list, 'form':form, 'user':user}, context_instance=RequestContext(request))
+	form = SearchForm(request.GET)
+	search = request.GET.get('search') 
+	list = SampleSearch(search)
+	return render_to_response('sample_list.html',{'tab':tab, 'list':list, 'form':form, 'user':user}, context_instance=RequestContext(request))
 
 
 @login_required
@@ -471,7 +410,9 @@ def sample_new(request, project_id):
 	project = Project.objects.get(id = project_id)
 	today = datetime.date.today()
 	sample = None
-
+	form = SampleEditForm()
+	ship_to_form = RequiredAddressForm()
+	end_user_form = NonRequiredAddressForm()
 	if request.method == 'POST':
 		form = SampleEditForm(request.POST)
 		ship_to_form = RequiredAddressForm(request.POST)
@@ -532,142 +473,21 @@ def quote_list(request):
 		form = SearchForm(request.GET)
 		if form.is_valid():
 			search = request.GET.get('search') 
-			if search:
-				if re.match(r'^\d*$', search):
-					battery, pack = [], []
-					pack = Pack.objects.filter(Q(vkb_number__icontains = search)|Q(drawing_number__icontains = search))
-					battery = Battery.objects.filter(type_number__icontains = search)
-					if battery:
-						for i in battery:
-							if list.filter(battery = i):
-								list = list.filter(battery = i)
-					if pack:
-						for i in pack:
-							if list.filter(battery_pack = i):
-								list = list.filter(battery_pack = i)
-					if not battery and not pack:
-						list = []
-				else:
-					battery = Battery.objects.filter(type_description__icontains = search)
-					if battery:
-						for i in battery:
-							list = list.filter(battery = i)
-					else:
-						list = QuoteRow.objects.none()
-						list = QuoteRow.objects.filter(
-							battery_description__icontains = search
-							)
-						quote_list = Quote.objects.filter(
-							Q(fob__icontains = search)| 
-							Q(terms__icontains = search)| 
-							Q(signature1_name__icontains = search)| 
-							Q(signature1_title__icontains = search)| 
-							Q(signature2_name__icontains = search)| 
-							Q(signature2_title__icontains = search)| 
-							Q(signature3_name__icontains = search)| 
-							Q(signature3_title__icontains = search)| 
-							Q(customer_company__icontains = search)| 
-							Q(customer_attention__icontains = search)| 
-							Q(customer_address_line1__icontains = search)| 
-							Q(customer_address_line2__icontains = search)| 
-							Q(customer_city__icontains = search)| 
-							Q(customer_state__icontains = search)| 
-							Q(customer_post_code__icontains = search)| 
-							Q(customer_email = search)
-							)
-						if quote_list:
-							for i in quote_list:
-								list = list|i.quoterow_set.all()
-						list = list.order_by('quote')
-		return render_to_response('quote_list.html',{'tab':tab, 'list':list, 'form':form, 'user':user}, context_instance=RequestContext(request))
-	else:
-		return render_to_response('quote_list.html',{'tab':tab, 'list':list, 'form':form, 'user':user}, context_instance=RequestContext(request))
+			list = QuoteSearch(search)
+	return render_to_response('quote_list.html',{'tab':tab, 'list':list, 'form':form, 'user':user}, context_instance=RequestContext(request))
 
 @login_required
 def quote_new(request, project_id):
+	project = get_object_or_404(Project, id = project_id)
 	tab = 'quote'
 	user = request.user
-	get_object_or_404(Project, id = project_id)
-	today = datetime.date.today()
-	project = Project.objects.get(id = project_id)
-	if project.primary_contact:
-		initial = {
-		'required_company' : project.primary_contact.company,
-		'required_attention' : project.primary_contact.firstname+" "+project.primary_contact.lastname,
-		'required_address_line1' : project.primary_contact.primary_address_line1,
-		'required_address_line2' : project.primary_contact.primary_address_line2,
-		'required_city' : project.primary_contact.primary_city,
-		'required_state' : project.primary_contact.primary_state,
-		'required_post_code' : project.primary_contact.primary_post_code,
-		'required_phone' : project.primary_contact.landline,
-		'required_fax' : project.primary_contact.fax,
-		'required_email' : project.primary_contact.email,
-		'required_id' : project.primary_contact.id,
-		}
-	else:
-		initial = {}
-	customer_form = RequiredAddressForm(initial = initial)
-	form = QuoteEditForm(initial = {
-		'date' : today,
-		'inquiry_date' : today,
-		'terms' : 'Net 30',
-		'fob' : 'Harrisburg, PA'
-		})
+	form, customer_form = InitializeProjectForm(project)
 	row_form = RowEditForm()
 	if request.method == 'POST':
 		form = QuoteEditForm(request.POST)
 		customer_form = RequiredAddressForm(request.POST)
 		if form.is_valid() and customer_form.is_valid():
-			date = form.cleaned_data['date'] 
-			inquiry_date = form.cleaned_data['inquiry_date'] 
-			rows = form.cleaned_data['rows']
-			fob = form.cleaned_data['fob']
-			terms = form.cleaned_data['terms']
-			customer_company = customer_form.cleaned_data['required_company'] 
-			customer_attention = customer_form.cleaned_data['required_attention'] 
-			customer_address_line1 = customer_form.cleaned_data['required_address_line1'] 
-			customer_address_line2 = customer_form.cleaned_data['required_address_line2'] 
-			customer_city = customer_form.cleaned_data['required_city'] 
-			customer_state = customer_form.cleaned_data['required_state'] 
-			customer_post_code = customer_form.cleaned_data['required_post_code'] 
-			customer_phone = customer_form.cleaned_data['required_phone'] 
-			customer_fax = customer_form.cleaned_data['required_fax'] 
-			customer_email = customer_form.cleaned_data['required_email'] 
-			signature1 = form.cleaned_data['signature1']
-			signature1_title = form.cleaned_data['signature1_title']
-			signature2 = form.cleaned_data['signature2']
-			signature2_title = form.cleaned_data['signature2_title']
-			signature3 = form.cleaned_data['signature3']
-			signature3_title = form.cleaned_data['signature3_title']
-			quote_number = Quote.get_quote_number()
-			new_quote = Quote(
-				project = project,
-				quote_number = quote_number,
-				date = date,
-				author = Contact.objects.get(user = user),
-				editor = Contact.objects.get(user = user),
-				authored_date = date,
-				edited_date = date,
-				fob = fob,
-				terms = terms,
-				inquiry_date = inquiry_date,
-				signature1_name = signature1,
-				signature1_title = signature1_title,
-				signature2_name = signature2,
-				signature2_title = signature2_title,
-				signature3_name = signature3,
-				signature3_title = signature3_title,
-				customer_company = customer_company,
-				customer_attention = customer_attention,
-				customer_address_line1 = customer_address_line1,
-				customer_address_line2 = customer_address_line2,
-				customer_city = customer_city,
-				customer_state = customer_state,
-				customer_post_code = customer_post_code,
-				customer_phone = customer_phone,
-				customer_fax = customer_fax,
-				customer_email = customer_email,
-				)
+			quote = QuoteEditFormHandler(form, customer_form)
 			new_quote.save()
 
 			for i in range(rows):
@@ -1413,6 +1233,57 @@ def ContactSearch(search):
 		list = Contact.objects.filter(Q(firstname__icontains = search)|Q(lastname__icontains = search)|Q(company__icontains = search))
 	return list
 
+def QuoteSearch(search):
+	if search:
+		if re.match(r'^\d*$', search):
+			battery, pack = [], []
+			pack = Pack.objects.filter(Q(vkb_number__icontains = search)|Q(drawing_number__icontains = search))
+			battery = Battery.objects.filter(type_number__icontains = search)
+			if battery:
+				for i in battery:
+					if list.filter(battery = i):
+						list = list.filter(battery = i)
+			if pack:
+				for i in pack:
+					if list.filter(battery_pack = i):
+						list = list.filter(battery_pack = i)
+			if not battery and not pack:
+				list = []
+		else:
+			battery = Battery.objects.filter(type_description__icontains = search)
+			if battery:
+				for i in battery:
+					list = list.filter(battery = i)
+			else:
+				list = QuoteRow.objects.none()
+				list = QuoteRow.objects.filter(
+					battery_description__icontains = search
+					)
+				quote_list = Quote.objects.filter(
+					Q(fob__icontains = search)| 
+					Q(terms__icontains = search)| 
+					Q(signature1_name__icontains = search)| 
+					Q(signature1_title__icontains = search)| 
+					Q(signature2_name__icontains = search)| 
+					Q(signature2_title__icontains = search)| 
+					Q(signature3_name__icontains = search)| 
+					Q(signature3_title__icontains = search)| 
+					Q(customer_company__icontains = search)| 
+					Q(customer_attention__icontains = search)| 
+					Q(customer_address_line1__icontains = search)| 
+					Q(customer_address_line2__icontains = search)| 
+					Q(customer_city__icontains = search)| 
+					Q(customer_state__icontains = search)| 
+					Q(customer_post_code__icontains = search)| 
+					Q(customer_email = search)
+					)
+				if quote_list:
+					for i in quote_list:
+						list = list|i.quoterow_set.all()
+				list = list.order_by('quote')
+	else:
+		list = QuoteRow.objects.none()
+	return list
 #FORM HANDLERS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 def ProjectEditFormHandler(form):
 	if form.is_valid():
@@ -1605,6 +1476,87 @@ def BatteryEditFormHandler(form, battery, datasheet):
 		)
 	return battery
 
+def PackEditFormHandler(pack, form, vkb_form, drawing):
+	if not pack: pack = Pack() 
+	drawing_number = form.cleaned_data['drawing_number']
+	vkb_number,battery = vkb_form.cleaned_data['vkb_number']
+	chemistry = form.cleaned_data['chemistry']
+	type = form.cleaned_data['type']
+	configuration = form.cleaned_data['configuration']
+	connection = form.cleaned_data['connection']
+	series_cells = form.cleaned_data['series_cells']
+	parallel_cells = form.cleaned_data['parallel_cells']
+	capacity = form.cleaned_data['capacity']
+	voltage = form.cleaned_data['voltage']
+	max_cont = form.cleaned_data['max_cont']
+	max_pulse = form.cleaned_data['max_pulse']
+	pack.battery = battery
+	pack.vkb_number = vkb_number
+	pack.drawing_number = drawing_number
+	pack.chemistry = chemistry
+	pack.type = type
+	pack.configuration = configuration
+	pack.connection = connection
+	pack.series_cells = series_cells
+	pack.parallel_cells = parallel_cells
+	pack.capacity = capacity
+	pack.voltage = voltage
+	pack.max_cont = max_cont
+	pack.max_pulse = max_pulse
+	return pack
+
+def QuoteEditFormHandler(form, customer_form):
+	date = form.cleaned_data['date'] 
+	inquiry_date = form.cleaned_data['inquiry_date'] 
+	rows = form.cleaned_data['rows']
+	fob = form.cleaned_data['fob']
+	terms = form.cleaned_data['terms']
+	customer_company = customer_form.cleaned_data['required_company'] 
+	customer_attention = customer_form.cleaned_data['required_attention'] 
+	customer_address_line1 = customer_form.cleaned_data['required_address_line1'] 
+	customer_address_line2 = customer_form.cleaned_data['required_address_line2'] 
+	customer_city = customer_form.cleaned_data['required_city'] 
+	customer_state = customer_form.cleaned_data['required_state'] 
+	customer_post_code = customer_form.cleaned_data['required_post_code'] 
+	customer_phone = customer_form.cleaned_data['required_phone'] 
+	customer_fax = customer_form.cleaned_data['required_fax'] 
+	customer_email = customer_form.cleaned_data['required_email'] 
+	signature1 = form.cleaned_data['signature1']
+	signature1_title = form.cleaned_data['signature1_title']
+	signature2 = form.cleaned_data['signature2']
+	signature2_title = form.cleaned_data['signature2_title']
+	signature3 = form.cleaned_data['signature3']
+	signature3_title = form.cleaned_data['signature3_title']
+	quote_number = Quote.get_quote_number()
+	quote = Quote(
+		project = project,
+		quote_number = quote_number,
+		date = date,
+		author = Contact.objects.get(user = user),
+		editor = Contact.objects.get(user = user),
+		authored_date = date,
+		edited_date = date,
+		fob = fob,
+		terms = terms,
+		inquiry_date = inquiry_date,
+		signature1_name = signature1,
+		signature1_title = signature1_title,
+		signature2_name = signature2,
+		signature2_title = signature2_title,
+		signature3_name = signature3,
+		signature3_title = signature3_title,
+		customer_company = customer_company,
+		customer_attention = customer_attention,
+		customer_address_line1 = customer_address_line1,
+		customer_address_line2 = customer_address_line2,
+		customer_city = customer_city,
+		customer_state = customer_state,
+		customer_post_code = customer_post_code,
+		customer_phone = customer_phone,
+		customer_fax = customer_fax,
+		customer_email = customer_email,
+		)
+	return quote
 #FORM INITIALIZERS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 def InitializeProjectEditForm(project):
 	initial = {
@@ -1763,6 +1715,51 @@ def InitializeSampleEditForm(o):
 		form, ship_to_form, end_user_form = None,  None,  None  
 		return form, ship_to_form, end_user_form
 
+def InitializePackEditForm(pack):
+	form = PackEditForm(initial = {
+			'drawing_number':pack.drawing_number,
+			'chemistry':pack.chemistry, 
+			'type':pack.type, 
+			'configuration':pack.configuration, 
+			'series_cells':pack.series_cells, 
+			'parallel_cells':pack.parallel_cells, 
+			'connection':pack.connection, 
+			'capacity':pack.capacity, 
+			'voltage':pack.voltage, 
+			'max_cont':pack.max_cont, 
+			'max_pulse':pack.max_pulse 
+		})
+	vkb_form = VKBForm(initial = {
+			'vkb_number':pack.vkb_number, 
+		})
+	return form, vkb_form
+
+def InitializeProjectForm(project):
+	if project.primary_contact:
+		initial = {
+		'required_company' : project.primary_contact.company,
+		'required_attention' : project.primary_contact.firstname+" "+project.primary_contact.lastname,
+		'required_address_line1' : project.primary_contact.primary_address_line1,
+		'required_address_line2' : project.primary_contact.primary_address_line2,
+		'required_city' : project.primary_contact.primary_city,
+		'required_state' : project.primary_contact.primary_state,
+		'required_post_code' : project.primary_contact.primary_post_code,
+		'required_phone' : project.primary_contact.landline,
+		'required_fax' : project.primary_contact.fax,
+		'required_email' : project.primary_contact.email,
+		'required_id' : project.primary_contact.id,
+		}
+	else:
+		initial = {}
+	customer_form = RequiredAddressForm(initial = initial)
+	today = datetime.date.today()
+	form = QuoteEditForm(initial = {
+		'date' : today,
+		'inquiry_date' : today,
+		'terms' : 'Net 30',
+		'fob' : 'Harrisburg, PA'
+		})
+	return form, customer_form
 #WORD DOC FUNCTIONS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 def SampleWordDoc(sample):
 	c = Context({'sample':sample})

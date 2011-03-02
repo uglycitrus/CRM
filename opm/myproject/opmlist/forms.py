@@ -97,6 +97,9 @@ CONFIGURATION_CHOICES = (
 class SearchForm(forms.Form):
 	search = forms.CharField()
 
+class VKBForm(forms.Form):
+	vkb_number = New_VKBField()
+
 class LogInForm(forms.Form):
 	username = forms.CharField()
 	password = forms.CharField(widget = forms.PasswordInput)
